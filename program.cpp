@@ -98,10 +98,35 @@ public:
     }
 };
 
+// Function to check if two line segments intersect
+bool intersects(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4)
+{
+    // Calculate the intersecting point of the two line segments
+    long long denominator1 = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+    long long denominator2 = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+    if (denominator1 == 0 || denominator2 == 0) return false; // line segments are parallel
+
+    long long intersectX = ((long long)x1 * y2 - (long long)y1 * x2) * (x3 - x4) - ((long long)x1 - x2) * ((long long)x3 * y4 - (long long)y3 * x4);
+    long long intersectY = ((long long)x1 * y2 - (long long)y1 * x2) * (y3 - y4) - ((long long)y1 - y2) * ((long long)x3 * y4 - (long long)y3 * x4);
+
+    // Check if the intersecting point is within the bounds of both line segments
+    if ((min(x1, x2) <= intersectX && intersectX <= max(x1, x2))
+            && (min(y1, y2) <= intersectY && intersectY <= max(y1, y2))
+            && (min(x3, x4) <= intersectX && intersectX <= max(x3, x4))
+            && (min(y3, y4) <= intersectY && intersectY <= max(y3, y4)))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 Graph generateRandomGraph()
 {
     Graph g;
-    
+
     // Set the seed to time(0)
     srand(time(0));
 
@@ -124,7 +149,32 @@ Graph generateRandomGraph()
             Vertex *v2 = g.vertices[j];
             if (rand() % 2 == 0) // generates a random boolean value
             {
-                g.addEdge(v1, v2);
+                // Check if adding this edge would make the graph non-planar
+                bool doesIntersect = false;
+                for (Vertex *v : g.vertices)
+                {
+                    if (v == v1 || v == v2)
+                        continue;
+
+                    // Check if the edge intersects with any other edge in the graph
+                    for (Vertex *neighbor : v->neighbors)
+                    {
+                        if (intersects(v1->x, v1->y, v2->x, v2->y, v->x, v->y, neighbor->x, neighbor->y))
+                        {
+                            doesIntersect = true;
+                            break;
+                        }
+                    }
+
+                    if (doesIntersect)
+                        break;
+                }
+
+                if (!doesIntersect)
+                {
+                    // Add the edge if it doesn't intersect with any other edge
+                    g.addEdge(v1, v2);
+                }
             }
         }
     }
