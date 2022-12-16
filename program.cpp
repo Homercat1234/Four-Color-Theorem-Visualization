@@ -101,8 +101,7 @@ public:
 Graph generateRandomGraph()
 {
     Graph g;
-
-
+    
     // Set the seed to time(0)
     srand(time(0));
 
