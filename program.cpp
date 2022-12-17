@@ -101,26 +101,12 @@ public:
 // Function to check if two line segments intersect
 bool intersects(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4)
 {
-    // Calculate the intersecting point of the two line segments
-    long long denominator1 = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
-    long long denominator2 = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
-    if (denominator1 == 0 || denominator2 == 0) return false; // line segments are parallel
+    // Calculate the cross product of the two line segments
+    long long cross1 = (long long)(x2 - x1) * (y3 - y1) - (long long)(y2 - y1) * (x3 - x1);
+    long long cross2 = (long long)(x2 - x1) * (y4 - y1) - (long long)(y2 - y1) * (x4 - x1);
 
-    long long intersectX = ((long long)x1 * y2 - (long long)y1 * x2) * (x3 - x4) - ((long long)x1 - x2) * ((long long)x3 * y4 - (long long)y3 * x4);
-    long long intersectY = ((long long)x1 * y2 - (long long)y1 * x2) * (y3 - y4) - ((long long)y1 - y2) * ((long long)x3 * y4 - (long long)y3 * x4);
-
-    // Check if the intersecting point is within the bounds of both line segments
-    if ((min(x1, x2) <= intersectX && intersectX <= max(x1, x2))
-            && (min(y1, y2) <= intersectY && intersectY <= max(y1, y2))
-            && (min(x3, x4) <= intersectX && intersectX <= max(x3, x4))
-            && (min(y3, y4) <= intersectY && intersectY <= max(y3, y4)))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    // Return true if the cross product has opposite signs, indicating that the line segments intersect
+    return cross1 * cross2 < 0;
 }
 
 Graph generateRandomGraph()
