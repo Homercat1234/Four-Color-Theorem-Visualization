@@ -1,4 +1,4 @@
-# GraphToImage
+# Four-Color Theorem Visualization
 A program to convert a graph into a 2d graphics. AI assisted using ChatGPT
 
 The generateRandomGraph function generates a random graph with a random number of vertices between 10 and 20 (inclusive) and random edges between the vertices. It does this by creating the vertices and adding them to the graph, and then generating random edges between the vertices by choosing a vertex and checking if it should be connected to another vertex with a 50% probability.
